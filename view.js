@@ -1,8 +1,7 @@
 (function() {
-	function View(w, h, dataStore) {
+	function View(w, h) {
 		this.w = w;
 		this.h = h;
-		this.dataStore = dataStore;
 	}
 	View.prototype.init = function(map) {
 		var self = this;
@@ -22,7 +21,6 @@
 				s = 0;
 			}
 			map.set(cx, cy, s);
-			self.dataStore.child(cx+"-"+cy).set(s);
 		}
 		clicker.click(function(e, x, y) {
 			addState(x, y);

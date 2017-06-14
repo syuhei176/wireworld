@@ -1,7 +1,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://cdn.mlkcca.com/v2.1/milkcocoa.js"></script>
 <script src="jquery-1.10.2.min.js"></script>
 <script src="snap.svg-min.js"></script>
 <script src="cellautomaton.js"></script>
@@ -14,9 +13,7 @@ position: fixed;
 </style>
 <script>
 $(function() {
-	var milkcocoa = new MilkCocoa("https://mlkcca.com", "mlkdev-000m", function() {});
-	var ds = milkcocoa.DataStore("map");
-	var view = new View(30, 30, ds);
+	var view = new View(30, 30);
 	var wireworld = WireWorld(function(x, y, state) {
 		if(state == 0) {
 			view.change(x, y, "#232323");
@@ -30,18 +27,9 @@ $(function() {
 	});
 	view.init(wireworld);
 	wireworld.refresh();
-	ds.get(function(e){
-		for(var key in e) {
-			if(key == 'id' || key == 'path') continue;
-			var pos = key.split('-');
-			var x = Number(pos[0]);
-			var y = Number(pos[1]);
-			wireworld.set(x, y, Number(e[key]));
-		}
-		setInterval(function(){
-			wireworld.step();
-		}, 500);
-	});
+	setInterval(function(){
+		wireworld.step();
+	}, 500);
 })
 </script>
 </head>

@@ -1,5 +1,5 @@
-(function(){
-	function CellAutomaton(init, rule, listener) {
+export default class CellAutomaton {
+	constructor(init, rule, listener) {
 		this.w = 30;
 		this.h = 30;
 		this.current_chunk = {x:0, y:0};
@@ -16,17 +16,22 @@
 				};
 			}
 		}
+		this.load()
 	}
-	CellAutomaton.prototype.get = function(i, j) {
+
+	get(i, j) {
 		return this.map[i][j].state;
 	}
-	CellAutomaton.prototype.set = function(i, j, state) {
+
+	set(i, j, state) {
 		if(this.map[i][j].state != state) {
 			this.listener(i, j, state);
 		}
 		this.map[i][j].state = state;
+		this.save()
 	}
-	CellAutomaton.prototype.each = function(cb) {
+
+	each(cb) {
 		var d = 0;
 		for(var i=0;i < this.w;i++) {
 			for(var j=0;j < this.h;j++) {
@@ -35,14 +40,16 @@
 		}
 		return d;
 	}
-	CellAutomaton.prototype.refresh = function() {
+
+	refresh() {
 		for(var i=0;i < this.w;i++) {
 			for(var j=0;j < this.h;j++) {
 				this.listener(i, j, this.map[i][j].state);
 			}
 		}
 	}
-	CellAutomaton.prototype.step = function() {
+
+	step() {
 		for(var i=1;i < this.w-1;i++) {
 			for(var j=1;j < this.h-1;j++) {
 				this.map[i][j].next = this.rule([this.map[i-1][j-1].state,
@@ -66,7 +73,23 @@
 					this.map[i][j].state = this.map[i][j].next;
 				}
 			}
+		}		
+	}
+
+	save() {
+		localStorage.setItem('map', JSON.stringify(this.map))
+	}
+
+	load() {
+		try{
+			const map = JSON.parse(localStorage.getItem('map'))
+			if(map) {
+				this.map = map
+			}
+		}catch(e){
+			console.error(e)
+			this.map = []
 		}
 	}
-	window.CellAutomaton = CellAutomaton;
-}())
+
+}

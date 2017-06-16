@@ -1,5 +1,11 @@
 import View from './view'
 import {getWireWorld} from './wireworld'
+import {diode} from './sample'
+
+let map = localStorage.getItem('map')
+if(!map) {
+	localStorage.setItem('map', JSON.stringify(diode))
+}
 
 var view = new View(30, 30);
 var wireworld = getWireWorld(function(x, y, state) {
